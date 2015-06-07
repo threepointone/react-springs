@@ -33,7 +33,7 @@ props
 
 - to (Spring): *number* : sets end value for the spring. if `atRest` is `true`, then the spring immediately snaps to `to`.
 - to (Springs): *obj* : similar to `Spring`, but accepts a map of key-values.
-- from: *number* : sets start value for a spring. setting it while a spring is in motion will set its current value to `from`, and continue to `to`
+- from: *number* : sets start value for a spring. changing it while a spring is in motion will set its current value to `from`, and continue to `to`
 - atRest: *boolean*
 - friction: *number*
 - tension: *number*
