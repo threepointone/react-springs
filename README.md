@@ -14,7 +14,7 @@ Dynamic animations for react, powered by rebound.
 </Spring>
 
 // you can compose multiple springs
-<Springs to={{x: 20, y: 30}}>
+<Springs to={{x: 20, y: 30}} tension={30} overShootClamping={true}>
   {val => <div style={{...styles.box, ...val}}></div>
 </Springs>
 
