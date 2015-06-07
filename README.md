@@ -22,8 +22,9 @@ Dynamic animations for react, powered by rebound.
 <Spring to={20} tension={15} friction={1.5}>
   {xval =>
     <Spring to={30} tension={34} friction={7}>
-      {yval => <div style={{...styles.box, ...styles.blue, left: xval, top: yval}}></div>}
-    </Spring>}
+      {yval =>
+        <div style={{...styles.box, ...styles.blue, left: xval, top: yval}}/> }
+    </Spring> }
 </Spring>
 ```
 
