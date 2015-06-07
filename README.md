@@ -10,7 +10,7 @@ Dynamic animations for react, powered by rebound.
 ```js
 // output floats gradually from 0 to 10
 <Spring to={10}>
-  {val => <div>{val}</div>}
+  {val => <div>{val}</div>}       // yes, children is a function.
 </Spring>
 
 // you can compose multiple springs
@@ -29,10 +29,15 @@ Dynamic animations for react, powered by rebound.
 
 props
 ---
-to: *number* sets end value for the spring. if `atRest` is `true`, then the spring immediately snaps to `to`.
-from: *number* sets start value for a spring. setting it while a spring is in motion will set its current value to `from`, and continue to `to`
-atRest: *boolean*
-friction: *number*
-tension: *number*
-overShootClamping: *boolean*
 
+- to: *number* sets end value for the spring. if `atRest` is `true`, then the spring immediately snaps to `to`.
+- from: *number* sets start value for a spring. setting it while a spring is in motion will set its current value to `from`, and continue to `to`
+- atRest: *boolean*
+- friction: *number*
+- tension: *number*
+- overShootClamping: *boolean*
+
+dev
+---
+`npm install
+npm start`
