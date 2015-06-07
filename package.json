@@ -4,7 +4,8 @@
   "description": "ooh lookit the wow",
   "main": "index.js",
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "start": "make dev"
   },
   "keywords": [
     "animation",
