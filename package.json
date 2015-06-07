@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "mocha",
-    "start": "make dev"
+    "build": "babel src.js -o index.js",
+    "start": "HOT=1 babel-node dev.js",
+    "dev": "babel-node dev.js"
   },
   "keywords": [
     "animation",
