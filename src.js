@@ -111,8 +111,7 @@ export const Springs = React.createClass({
   },
   // todo - sort keys alphabetically
   render() {
-    var tree = this.to(this.props.to, Object.keys(this.props.to), {}, this.props.children);
-    return tree;
+    return this.to(this.props.to, Object.keys(this.props.to), {}, this.props.children);
   }
 });
 
