@@ -15,16 +15,14 @@ Dynamic animations for [react](https://facebook.github.io/react/), powered by [r
 
 // you can compose multiple springs
 <Springs to={{left: 20, top: 30}} tension={30} overShootClamping={true}>
-  {val => <div style={{...styles.box, ...val}}></div>
+  {val => <div style={{...styles.box, ...val}}></div>}
 </Springs>
 
 // alternately, if you want control on each spring
-<Spring to={20} tension={15} friction={1.5}>
-  {x =>
-    <Spring to={30} tension={34} friction={7}>
-      {y =>
-        <div style={{...styles.box, ...styles.blue, left: x, top: y}}/> }
-    </Spring> }
+<Spring to={20} tension={15} friction={1.5}> {x =>
+    <Spring to={30} tension={34} friction={7}> {y =>
+        <div style={{...styles.box, ...styles.blue, left: x, top: y}}/>}
+    </Spring>}
 </Spring>
 ```
 
