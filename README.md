@@ -19,8 +19,8 @@ Dynamic animations for [react](https://facebook.github.io/react/), powered by [r
 </Springs>
 
 // alternately, if you want control on each spring
-<Spring to={20} tension={15} friction={1.5}> {x =>
-    <Spring to={30} tension={34} friction={7}> {y =>
+<Spring to={20} friction={1.5}> {x =>
+    <Spring to={30} friction={7}> {y =>
         <div style={{left: x, top: y}}/>}
     </Spring>}
 </Spring>
