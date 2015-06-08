@@ -10,17 +10,22 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'd
 
 function _defineProperty(obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); }
 
-var _react = require('react');
-
-var _react2 = _interopRequireDefault(_react);
+// import React from 'react';
 
 var _rebound = require('rebound');
 
 var _rebound2 = _interopRequireDefault(_rebound);
 
+var React;
+try {
+  React = require('react-native');
+} catch (e) {
+  React = require('react');
+}
+
 var noop = function noop() {};
 
-var Spring = _react2['default'].createClass({
+var Spring = React.createClass({
   displayName: 'Spring',
 
   getDefaultProps: function getDefaultProps() {
@@ -41,13 +46,13 @@ var Spring = _react2['default'].createClass({
     return false;
   },
   propTypes: {
-    from: _react2['default'].PropTypes.number,
-    friction: _react2['default'].PropTypes.number,
-    tension: _react2['default'].PropTypes.number,
-    to: _react2['default'].PropTypes.number,
-    atRest: _react2['default'].PropTypes.bool,
-    overShootClamping: _react2['default'].PropTypes.bool,
-    children: _react2['default'].PropTypes.func
+    from: React.PropTypes.number,
+    friction: React.PropTypes.number,
+    tension: React.PropTypes.number,
+    to: React.PropTypes.number,
+    atRest: React.PropTypes.bool,
+    overShootClamping: React.PropTypes.bool,
+    children: React.PropTypes.func
   },
 
   update: function update(props, spring, springSystem) {
@@ -112,7 +117,7 @@ var Spring = _react2['default'].createClass({
 });
 
 exports.Spring = Spring;
-var Springs = _react2['default'].createClass({
+var Springs = React.createClass({
   displayName: 'Springs',
 
   to: function to(pos, keys, value, callback) {
@@ -121,7 +126,7 @@ var Springs = _react2['default'].createClass({
     if (keys.length === 0) {
       return callback(value);
     }
-    return _react2['default'].createElement(
+    return React.createElement(
       Spring,
       _extends({}, this.props, { to: pos[keys[0]] }),
       function (val) {

@@ -1,4 +1,12 @@
-import React from 'react';
+var React;
+try{
+  React = require('react-native');
+}
+catch(e){
+  React = require('react');
+}
+
+// import React from 'react';
 import rebound from 'rebound';
 
 let noop = () => {};
