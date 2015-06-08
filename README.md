@@ -14,16 +14,16 @@ Dynamic animations for react, powered by rebound.
 </Spring>
 
 // you can compose multiple springs
-<Springs to={{x: 20, y: 30}} tension={30} overShootClamping={true}>
+<Springs to={{left: 20, top: 30}} tension={30} overShootClamping={true}>
   {val => <div style={{...styles.box, ...val}}></div>
 </Springs>
 
 // alternately, if you want control on each spring
 <Spring to={20} tension={15} friction={1.5}>
-  {xval =>
+  {x =>
     <Spring to={30} tension={34} friction={7}>
-      {yval =>
-        <div style={{...styles.box, ...styles.blue, left: xval, top: yval}}/> }
+      {y =>
+        <div style={{...styles.box, ...styles.blue, left: x, top: y}}/> }
     </Spring> }
 </Spring>
 ```
