@@ -119,7 +119,7 @@ export const SlideToUnlock = React.createClass({
     return {
       x: 0,
       unlocking: false,
-      unlocked: 0,
+      opacity: 0,
       delta: 0
 
     };
@@ -135,17 +135,21 @@ export const SlideToUnlock = React.createClass({
     });
   },
   onMouseUp(){
-    this.setState({unlocking: false, unlocked: this.state.x > 190 ? 1 : 0, ...(this.state.x > 190 ? {} : {x: 0, delta: 0})});
+    this.setState({
+      unlocking: false,
+      opacity: this.state.x > 190 ? 1 : 0,
+      ...(this.state.x > 190 ? {} : {x: 0, delta: 0})
+    });
   },
   render() {
-    return <Springs to={{x: this.state.x, opacity: this.state.unlocked, delta: this.state.delta}} tension={70} friction={8} overShootClamping={true}>{ val =>
+    return <Springs to={{x: this.state.x, opacity: this.state.opacity, delta: this.state.delta}} tension={70} friction={8} overShootClamping={true}>{ val =>
       <div style={{...styles.unlock.wrap, ...styles.unlock.noSelect}} onMouseMove={this.onMouseMove} onMouseUp={this.onMouseUp}>
         <div style={{...styles.unlock.lockscreen, opacity: 1 - val.opacity, zIndex: Math.round(1 - val.opacity)}}>
           slide
           <div id='keykey' style={{...styles.unlock.key, left: val.x - val.delta}} onMouseDown={this.onKeyMouseDown}> > </div>
         </div>
         <div style={{...styles.unlock.main, opacity: val.opacity, zIndex: Math.round(val.opacity)}}>
-          <div style={styles.unlock.lock} onClick={()=> this.setState({unlocked: 0, x: 0, delta: 0})}>
+          <div style={styles.unlock.lock} onClick={()=> this.setState({opacity: 0, x: 0, delta: 0})}>
           click
         </div>
         </div>
