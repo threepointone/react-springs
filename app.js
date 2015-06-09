@@ -87,8 +87,8 @@ export const Slideshow = React.createClass({
         onMouseMove={e => this.setState({x: e.pageX - ((win.width - 400) / 2), y: e.pageY - 20})}
         onMouseEnter={() => this.setState({opacity: 1})}
         onMouseLeave={() => this.setState({opacity: 0})}>
-          <Spring to={1} from={this.state.selected} tension={10} friction={1}>{bg =>
-            <div style={{backgroundColor: rebound.util.interpolateColor(bg, '#ccc', '#fff'), ...styles.slideshow.slide}}>
+          <Spring to={1} from={this.state.selected} tension={10} friction={1} overShootClamping={true}>{bg =>
+            <div style={{backgroundColor: rebound.util.interpolateColor(bg, '#f5f357', '#fff'), ...styles.slideshow.slide}}>
             {this.state.hover > -1 ? this.state.hover : this.state.active}
           </div>}</Spring>
 
