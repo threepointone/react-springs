@@ -6,7 +6,6 @@ catch(e){
   React = require('react');
 }
 
-// import React from 'react';
 import rebound from 'rebound';
 
 let noop = () => {};
@@ -38,36 +37,38 @@ export const Spring = React.createClass({
     overShootClamping: React.PropTypes.bool,
     children: React.PropTypes.func
   },
-
-  update(props, spring, springSystem){
-    var map = {
-      friction: () => {
-        spring.getSpringConfig().friction =
-          rebound.OrigamiValueConverter.frictionFromOrigamiValue(props.friction);
-      },
-      tension: () => {
-        spring.getSpringConfig().tension =
-          rebound.OrigamiValueConverter.tensionFromOrigamiValue(props.tension);
-      },
-      from: pos => {
-        if(this.props.from !== pos){
-          spring.setCurrentValue(pos);
-        }
-      },
-      to: pos => {
-        if(props.atRest){
-          spring.setCurrentValue(pos).setAtRest();
-        }
-        else{
-          spring.setEndValue(pos);
-        }
-      },
-      overShootClamping: bool => {
-        spring.setOvershootClampingEnabled(bool);
+  statics: {
+    // high perf "setters",
+    friction(spring, props){
+      spring.getSpringConfig().friction =
+        rebound.OrigamiValueConverter.frictionFromOrigamiValue(props.friction);
+    },
+    tension(spring, props){
+      spring.getSpringConfig().tension =
+        rebound.OrigamiValueConverter.frictionFromOrigamiValue(props.tension);
+    },
+    from(spring, props){
+      spring.setCurrentValue(props.from, true).setEndValue(spring.getEndValue());
+    },
+    overShootClamping(spring, props){
+      spring.setOvershootClampingEnabled(props.overShootClamping);
+    },
+    to(spring, props){
+      if(props.atRest){
+        spring.setCurrentValue(props.to).setAtRest();
       }
-    };
+      else{
+        spring.setEndValue(props.to);
+      }
+    }
+  },
 
-    Object.keys(props).forEach(k => (map[k] || noop)(props[k]));
+  update(props, spring, initial){
+    Object.keys(props).forEach(k => {
+      if(Spring[k] && (initial || (props[k] !== this.props[k]))){
+        Spring[k](spring, props);
+      }
+    });
   },
 
   componentWillMount() {
@@ -81,7 +82,7 @@ export const Spring = React.createClass({
         this.props.onSpringUpdate(spring);
       }
     });
-    this.update(this.props, spring, springSystem);
+    this.update(this.props, spring, true);
     this.setState({spring, springSystem});
   },
   componentWillUnmount() {
@@ -89,7 +90,7 @@ export const Spring = React.createClass({
     // this.state.springSystem.destroy();
   },
   componentWillReceiveProps(nextProps) {
-    this.update(nextProps, this.state.spring, this.state.springSystem);
+    this.update(nextProps, this.state.spring, false);
   },
 
   render(){
