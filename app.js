@@ -103,57 +103,15 @@ export const Followers = React.createClass({
 });
 
 styles.unlock = {
-  wrap: {
-    width: 400,
-    height: 400,
-    outline: '1px solid #ccc',
-    marginTop: 20,
-    // alignItems: 'center',
-    justifyContent: 'center'
-  },
-  lockscreen: {
-    width: 200,
-    height: 50,
-    backgroundColor: '#ccc',
-    position: 'absolute',
-    top: '50%',
-    marginTop: -25,
-    left: '50%',
-    marginLeft: -100,
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 30
-  },
-  key: {
-    width: 50,
-    height: 50,
-    position: 'absolute',
-    top: 0,
-    backgroundColor: '#fff',
-    cursor: 'pointer',
-    alignItems: 'center',
-    justifyContent: 'center',
-    borderRadius: 30,
-    boxShadow: '2px 2px 10px #aaa'
-  },
-  main: {
-    backgroundColor: 'black',
-    justifyContent: 'center',
-    alignItems: 'center',
-    color: 'white',
-    flex: 1
-  },
-  lock: {
-    cursor: 'pointer'
-  },
-   noSelect: {
-    '-webkit-touch-callout': 'none',
-    '-webkit-user-select': 'none',
-    '-khtml-user-select': 'none',
-    '-moz-user-select': 'none',
-    '-ms-user-select': 'none',
-    'user-select': 'none'
-   }
+  wrap: { width: 400, height: 400, outline: '1px solid #ccc', marginTop: 20, justifyContent: 'center' },
+  lockscreen: { width: 200, height: 50, backgroundColor: '#ccc', position: 'absolute', top: '50%', marginTop: -25, left: '50%',
+    marginLeft: -100, justifyContent: 'center', alignItems: 'center', borderRadius: 30 },
+  key: { width: 50, height: 50, position: 'absolute', top: 0, backgroundColor: '#fff', cursor: 'pointer', alignItems: 'center',
+    justifyContent: 'center', borderRadius: 30, boxShadow: '2px 2px 10px #aaa' },
+  main: { backgroundColor: 'black', justifyContent: 'center', alignItems: 'center', color: 'white', flex: 1 },
+  lock: { cursor: 'pointer' },
+   noSelect: { 'WebkitTouchCallout': 'none', 'WebkitUserSelect': 'none', 'KhtmlUserSelect': 'none',
+    'MozUserSelect': 'none', 'MsUserSelect': 'none', 'UserSelect': 'none' }
 };
 
 export const SlideToUnlock = React.createClass({
@@ -167,12 +125,9 @@ export const SlideToUnlock = React.createClass({
     };
   },
   onMouseMove(e){
-    // console.log(this.state.delta);
     this.setState({x: this.state.unlocking ? Math.min(200, Math.max(0, e.pageX - ((win.width - 200) / 2))) : this.state.x});
   },
   onKeyMouseDown(e){
-    // console.log(e);
-    console.log();
     this.setState({
       unlocking: true,
       x: Math.min(200, Math.max(0, e.pageX - ((win.width - 200) / 2))) - document.getElementById('keykey').offsetLeft,
