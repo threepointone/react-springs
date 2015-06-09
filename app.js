@@ -74,11 +74,7 @@ export const Slideshow = React.createClass({
     return {n: 100};
   },
   convert(x, y){
-    let res = Slideshow.convert(this.props.n * 60, 400, 60, 400, x, y);
-    return {
-      left: res.left,
-      top: res.top
-    };
+    return Slideshow.convert(this.props.n * 60, 400, 60, 400, x, y);
   },
 
   render() {
