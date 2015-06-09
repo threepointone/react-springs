@@ -10,8 +10,6 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'd
 
 function _defineProperty(obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); }
 
-// import React from 'react';
-
 var _rebound = require('rebound');
 
 var _rebound2 = _interopRequireDefault(_rebound);
@@ -54,36 +52,36 @@ var Spring = React.createClass({
     overShootClamping: React.PropTypes.bool,
     children: React.PropTypes.func
   },
+  statics: {
+    // high perf "setters",
+    friction: function friction(spring, props) {
+      spring.getSpringConfig().friction = _rebound2['default'].OrigamiValueConverter.frictionFromOrigamiValue(props.friction);
+    },
+    tension: function tension(spring, props) {
+      spring.getSpringConfig().tension = _rebound2['default'].OrigamiValueConverter.frictionFromOrigamiValue(props.tension);
+    },
+    from: function from(spring, props) {
+      spring.setCurrentValue(props.from, true).setEndValue(spring.getEndValue());
+    },
+    overShootClamping: function overShootClamping(spring, props) {
+      spring.setOvershootClampingEnabled(props.overShootClamping);
+    },
+    to: function to(spring, props) {
+      if (props.atRest) {
+        spring.setCurrentValue(props.to).setAtRest();
+      } else {
+        spring.setEndValue(props.to);
+      }
+    }
+  },
 
-  update: function update(props, spring, springSystem) {
+  update: function update(props, spring, initial) {
     var _this = this;
 
-    var map = {
-      friction: function friction() {
-        spring.getSpringConfig().friction = _rebound2['default'].OrigamiValueConverter.frictionFromOrigamiValue(props.friction);
-      },
-      tension: function tension() {
-        spring.getSpringConfig().tension = _rebound2['default'].OrigamiValueConverter.tensionFromOrigamiValue(props.tension);
-      },
-      from: function from(pos) {
-        if (_this.props.from !== pos) {
-          spring.setCurrentValue(pos);
-        }
-      },
-      to: function to(pos) {
-        if (props.atRest) {
-          spring.setCurrentValue(pos).setAtRest();
-        } else {
-          spring.setEndValue(pos);
-        }
-      },
-      overShootClamping: function overShootClamping(bool) {
-        spring.setOvershootClampingEnabled(bool);
-      }
-    };
-
     Object.keys(props).forEach(function (k) {
-      return (map[k] || noop)(props[k]);
+      if (Spring[k] && (initial || props[k] !== _this.props[k])) {
+        Spring[k](spring, props);
+      }
     });
   },
 
@@ -100,7 +98,7 @@ var Spring = React.createClass({
         _this2.props.onSpringUpdate(spring);
       }
     });
-    this.update(this.props, spring, springSystem);
+    this.update(this.props, spring, true);
     this.setState({ spring: spring, springSystem: springSystem });
   },
   componentWillUnmount: function componentWillUnmount() {
@@ -108,7 +106,7 @@ var Spring = React.createClass({
     // this.state.springSystem.destroy();
   },
   componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
-    this.update(nextProps, this.state.spring, this.state.springSystem);
+    this.update(nextProps, this.state.spring, false);
   },
 
   render: function render() {
@@ -136,8 +134,7 @@ var Springs = React.createClass({
   },
   // todo - sort keys alphabetically
   render: function render() {
-    var tree = this.to(this.props.to, Object.keys(this.props.to), {}, this.props.children);
-    return tree;
+    return this.to(this.props.to, Object.keys(this.props.to), {}, this.props.children);
   }
 });
 exports.Springs = Springs;
