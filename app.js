@@ -128,10 +128,11 @@ export const SlideToUnlock = React.createClass({
     this.setState({x: this.state.unlocking ? Math.min(200, Math.max(0, e.pageX - ((win.width - 200) / 2))) : this.state.x});
   },
   onKeyMouseDown(e){
+    let x = Math.min(200, Math.max(0, e.pageX - ((win.width - 200) / 2))) - document.getElementById('keykey').offsetLeft;
     this.setState({
       unlocking: true,
-      x: Math.min(200, Math.max(0, e.pageX - ((win.width - 200) / 2))) - document.getElementById('keykey').offsetLeft,
-      delta: Math.min(200, Math.max(0, e.pageX - ((win.width - 200) / 2))) - document.getElementById('keykey').offsetLeft
+      x: x,
+      delta: x
     });
   },
   onMouseUp(){
@@ -150,8 +151,8 @@ export const SlideToUnlock = React.createClass({
         </div>
         <div style={{...styles.unlock.main, opacity: val.opacity, zIndex: Math.round(val.opacity)}}>
           <div style={styles.unlock.lock} onClick={()=> this.setState({opacity: 0, x: 0, delta: 0})}>
-          click
-        </div>
+            click
+          </div>
         </div>
       </div>
     }</Springs>;
