@@ -14,7 +14,7 @@ Dynamic animations for [react](https://facebook.github.io/react/), powered by [r
 </Spring>
 
 // you can compose multiple springs
-<Springs to={{left: 20, top: 30}} tension={30} overShootClamping={true}>
+<Springs to={{left: 20, top: 30}} tension={30} overshootClamping={true}>
   {val => <div style={val}></div>}
 </Springs>
 
@@ -35,7 +35,9 @@ props
 - atRest: *boolean*
 - friction: *number*
 - tension: *number*
-- overShootClamping: *boolean*
+- overshootClamping: *boolean*
+- onSpringUpdate (Spring): *function* : optional callback to be notified on every spring movement
+- onSpringUpdate (Springs): *function* : ~todo~
 
 dev
 ---

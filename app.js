@@ -10,12 +10,25 @@ function times (n, fn){
 
 let styles = {};
 
+function findPos(obj) {
+  var x = 0, y = 0;
+  if (obj.offsetParent) {
+    do{
+      x += obj.offsetLeft;
+      y += obj.offsetTop;
+    } while (obj = obj.offsetParent);
+  }
+  return {x, y};
+}
+
+
 styles.slideshow = {
   wrap: { width: 400, height: 400, outline: '1px solid #ccc' },
   bar: { flexDirection: 'row', height: 60, position: 'absolute' },
   slide: { flex: 1, fontSize: 200, alignItems: 'center', justifyContent: 'center' },
   thumb: { justifyContent: 'center', alignItems: 'center', flex: 1, cursor: 'pointer' }
 };
+
 
 // ICK
 var win; let winset = () => (win = { width: document.body.offsetWidth }); window.addEventListener('resize', winset); window.addEventListener('load', winset); winset();
@@ -40,7 +53,7 @@ export const Slideshow = React.createClass({
         onMouseMove={e => this.setState({x: e.pageX - ((win.width - 400) / 2), y: e.pageY - ((this.props.pos * 420) + 20)})}
         onMouseEnter={() => this.setState({opacity: 1})}
         onMouseLeave={() => this.setState({opacity: 0})}>
-          <Spring to={1} from={this.state.selected} tension={5} friction={1} overShootClamping={true}>{bg =>
+          <Spring to={1} from={this.state.selected} tension={5} friction={1} overshootClamping={true}>{bg =>
             <div style={{backgroundColor: rebound.util.interpolateColor(bg, '#ddd', '#fff'), ...styles.slideshow.slide}}>
             {this.state.active}
           </div>}</Spring>
@@ -48,7 +61,7 @@ export const Slideshow = React.createClass({
           <Springs to={{...this.convert(this.state.x, this.state.y), opacity: this.state.opacity}} tension={50} friction={8}>{val =>
             <div style={{...val, width: this.props.n * 60, ...styles.slideshow.bar}} onMouseLeave={() => this.setState({hover: -1})}>
               {times(this.props.n, i =>
-                <Spring to={this.state.hover === i ? 1 : 0} overShootClamping={true}>{ bg =>
+                <Spring to={this.state.hover === i ? 1 : 0} overshootClamping={true}>{ bg =>
                   <div key={i} style={{...styles.slideshow.thumb, backgroundColor: rebound.util.interpolateColor(bg, '#ccc', '#fff')}}
                     onMouseEnter={() => this.setState({hover: i})}
                     onClick={()=> this.setState({active: i, selected: (Math.random() / 100)})}>
@@ -128,7 +141,7 @@ export const SlideToUnlock = React.createClass({
     this.setState({x: this.state.unlocking ? Math.min(200, Math.max(0, e.pageX - ((win.width - 200) / 2))) : this.state.x});
   },
   onKeyMouseDown(e){
-    let x = Math.min(200, Math.max(0, e.pageX - ((win.width - 200) / 2))) - document.getElementById('keykey').offsetLeft;
+    let x = Math.min(200, Math.max(0, e.pageX - ((win.width - 200) / 2))) - document.getElementById('keyElement').offsetLeft;
     this.setState({
       unlocking: true,
       x: x,
@@ -143,11 +156,11 @@ export const SlideToUnlock = React.createClass({
     });
   },
   render() {
-    return <Springs to={{x: this.state.x, opacity: this.state.opacity, delta: this.state.delta}} tension={70} friction={8} overShootClamping={true}>{ val =>
+    return <Springs to={{x: this.state.x, opacity: this.state.opacity, delta: this.state.delta}} tension={70} friction={8} overshootClamping={true}>{ val =>
       <div style={{...styles.unlock.wrap, ...styles.unlock.noSelect}} onMouseMove={this.onMouseMove} onMouseUp={this.onMouseUp}>
         <div style={{...styles.unlock.lockscreen, opacity: 1 - val.opacity, zIndex: Math.round(1 - val.opacity)}}>
           slide
-          <div id='keykey' style={{...styles.unlock.key, left: val.x - val.delta}} onMouseDown={this.onKeyMouseDown}> > </div>
+          <div id='keyElement' style={{...styles.unlock.key, left: val.x - val.delta}} onMouseDown={this.onKeyMouseDown}> > </div>
         </div>
         <div style={{...styles.unlock.main, opacity: val.opacity, zIndex: Math.round(val.opacity)}}>
           <div style={styles.unlock.lock} onClick={()=> this.setState({opacity: 0, x: 0, delta: 0})}>
