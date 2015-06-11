@@ -10,16 +10,16 @@ function times (n, fn){
 
 let styles = {};
 
-function findPos(obj) {
-  var x = 0, y = 0;
-  if (obj.offsetParent) {
-    do{
-      x += obj.offsetLeft;
-      y += obj.offsetTop;
-    } while (obj = obj.offsetParent);
-  }
-  return {x, y};
-}
+// function findPos(obj) {
+//   var x = 0, y = 0;
+//   if (obj.offsetParent) {
+//     do{
+//       x += obj.offsetLeft;
+//       y += obj.offsetTop;
+//     } while (obj = obj.offsetParent);
+//   }
+//   return {x, y};
+// }
 
 
 styles.slideshow = {

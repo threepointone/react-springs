@@ -37,11 +37,9 @@ var Spring = React.createClass({
       onSpringUpdate: noop
     };
   },
-  shouldComponentUpdate: function shouldComponentUpdate(nextProps, nextState) {
-    if (nextState.value !== undefined) {
-      return true;
-    }
-    return false;
+  shouldComponentUpdate: function shouldComponentUpdate() {
+    return true;
+    // don't be surprised, this fine, since 'children' would have been rendered without Spring in the way
   },
   propTypes: {
     from: React.PropTypes.number,
@@ -50,7 +48,8 @@ var Spring = React.createClass({
     to: React.PropTypes.number,
     atRest: React.PropTypes.bool,
     overShootClamping: React.PropTypes.bool,
-    children: React.PropTypes.func
+    children: React.PropTypes.func,
+    onSpringUpdate: React.PropTypes.func
   },
   statics: {
     // high perf "setters",
@@ -118,6 +117,18 @@ exports.Spring = Spring;
 var Springs = React.createClass({
   displayName: 'Springs',
 
+  getDefaultProps: function getDefaultProps() {
+    return {
+      onSpringUpdate: noop
+    };
+  },
+  propTypes: {
+    onSpringUpdate: React.PropTypes.func
+  },
+  shouldComponentUpdate: function shouldComponentUpdate() {
+    return true;
+    // don't be surprised, this fine, since 'children' would have been rendered without Springs in the way
+  },
   to: function to(pos, keys, value, callback) {
     var _this3 = this;
 
@@ -126,7 +137,9 @@ var Springs = React.createClass({
     }
     return React.createElement(
       Spring,
-      _extends({}, this.props, { to: pos[keys[0]] }),
+      _extends({}, this.props, { to: pos[keys[0]], onSpringUpdate: function (spring) {
+          return _this3.props.onSpringUpdate(_defineProperty({}, keys[0], spring));
+        } }),
       function (val) {
         return _this3.to(pos, keys.slice(1), _extends({}, value, _defineProperty({}, keys[0], val)), callback);
       }
