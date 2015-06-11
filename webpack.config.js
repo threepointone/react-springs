@@ -21,7 +21,11 @@ let config = {
   resolve: {
     extensions: ['', '.js', '.jsx']
   },
-  plugins: []
+  plugins: [new webpack.DefinePlugin({
+      'process.env': {
+        'NODE_ENV': `"${process.env.NODE_ENV || 'development'}"`
+      }
+    })]
 };
 
 if(process.env.HOT){

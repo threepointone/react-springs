@@ -62,10 +62,10 @@ export const Spring = React.createClass({
       }
     }
   },
-  update(props, spring, initial){
+  update(props, initial){
     Object.keys(props).forEach(k => {
       if(Spring[k] && (initial || (props[k] !== this.props[k]))){
-        Spring[k](spring, props);
+        Spring[k](this.state.spring, props);
       }
     });
   },
@@ -81,22 +81,20 @@ export const Spring = React.createClass({
   },
 
   componentWillMount() {
-    this.update(this.props, this.state.spring, true);
+    this.update(this.props, true);
   },
   componentWillUnmount() {
     this.state.spring.removeAllListeners();
     // this.state.springSystem.destroy();
   },
   componentWillReceiveProps(nextProps) {
-    this.update(nextProps, this.state.spring, false);
+    this.update(nextProps, false);
   },
 
   render(){
     return this.props.children(this.state.spring.getCurrentValue());
   }
 });
-
-
 
 export const Springs = React.createClass({
   getDefaultProps(){
