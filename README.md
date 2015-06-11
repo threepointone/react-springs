@@ -5,7 +5,7 @@ react-springs
 
 `npm install react-springs react rebound --save`
 
-Dynamic animations for [react](https://facebook.github.io/react/), powered by [rebound](https://github.com/facebook/rebound-js).
+Dynamic animations for [react](https://facebook.github.io/react/)/[react-native](https://facebook.github.io/react-native/), powered by [rebound](https://github.com/facebook/rebound-js).
 
 ```js
 // output floats gradually from 0 to 10
