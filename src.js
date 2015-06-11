@@ -13,6 +13,7 @@ let noop = () => {};
 export const Spring = React.createClass({
   getDefaultProps(){
     return {
+      springSystem: new rebound.SpringSystem(),
       from: 0,
       to: 0,
       tension: 50,
@@ -24,7 +25,7 @@ export const Spring = React.createClass({
   },
   shouldComponentUpdate(){
     return true;
-    // don't be surprised, this fine, since 'children' would have been rendered without Spring in the way
+    // don't be surprised, this is fine, since 'children' would have been rendered without Spring in the way
   },
   propTypes: {
     from: React.PropTypes.number,
@@ -61,7 +62,6 @@ export const Spring = React.createClass({
       }
     }
   },
-
   update(props, spring, initial){
     Object.keys(props).forEach(k => {
       if(Spring[k] && (initial || (props[k] !== this.props[k]))){
@@ -69,20 +69,19 @@ export const Spring = React.createClass({
       }
     });
   },
+  getInitialState() {
+    return {
+      spring: this.props.springSystem.createSpring(this.props.tension, this.props.friction).addListener({
+        onSpringUpdate: () => {
+          this.setState({value: this.state.spring.getCurrentValue() });
+          this.props.onSpringUpdate(this.state.spring);
+        }
+      })
+    };
+  },
 
   componentWillMount() {
-    let springSystem = new rebound.SpringSystem();
-    let spring = springSystem.createSpring(this.props.tension, this.props.friction);
-
-    spring.addListener({
-      onSpringUpdate: () => {
-        this.setState({value: spring.getCurrentValue() });
-
-        this.props.onSpringUpdate(spring);
-      }
-    });
-    this.update(this.props, spring, true);
-    this.setState({spring, springSystem});
+    this.update(this.props, this.state.spring, true);
   },
   componentWillUnmount() {
     this.state.spring.removeAllListeners();
@@ -110,14 +109,14 @@ export const Springs = React.createClass({
   },
   shouldComponentUpdate(){
     return true;
-    // don't be surprised, this fine, since 'children' would have been rendered without Springs in the way
+    // don't be surprised, this is fine, since 'children' would have been rendered without Springs in the way
   },
   to(pos, keys, value, callback){
     if(keys.length === 0){
       return callback(value);
     }
-    return <Spring {...this.props} to={pos[keys[0]]} onSpringUpdate={spring => this.props.onSpringUpdate([keys[0], spring])}>
-      {val => this.to(pos, keys.slice(1), {...value, [keys[0]]: val}, callback)}
+    return <Spring {...this.props} to={pos[keys[0]]} onSpringUpdate={spring => this.props.onSpringUpdate(keys[0], spring)}>
+      {val => this.to(pos, keys.slice(1), (value[keys[0]] = val, value), callback)}
     </Spring>;
 
   },

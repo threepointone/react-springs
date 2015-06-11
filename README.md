@@ -37,7 +37,7 @@ props
 - tension: *number*
 - overshootClamping: *boolean*
 - onSpringUpdate (Spring): *function* : optional callback to be notified on every spring movement. 'returns' the spring.
-- onSpringUpdate (Springs): *function* : like `Spring`, but 'returns' [key, spring]
+- onSpringUpdate (Springs): *function* : like `Spring`, but 'returns' `key, spring`
 
 dev
 ---

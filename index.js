@@ -8,8 +8,6 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
-function _defineProperty(obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); }
-
 var _rebound = require('rebound');
 
 var _rebound2 = _interopRequireDefault(_rebound);
@@ -28,6 +26,7 @@ var Spring = React.createClass({
 
   getDefaultProps: function getDefaultProps() {
     return {
+      springSystem: new _rebound2['default'].SpringSystem(),
       from: 0,
       to: 0,
       tension: 50,
@@ -39,7 +38,7 @@ var Spring = React.createClass({
   },
   shouldComponentUpdate: function shouldComponentUpdate() {
     return true;
-    // don't be surprised, this fine, since 'children' would have been rendered without Spring in the way
+    // don't be surprised, this is fine, since 'children' would have been rendered without Spring in the way
   },
   propTypes: {
     from: React.PropTypes.number,
@@ -73,7 +72,6 @@ var Spring = React.createClass({
       }
     }
   },
-
   update: function update(props, spring, initial) {
     var _this = this;
 
@@ -83,22 +81,21 @@ var Spring = React.createClass({
       }
     });
   },
-
-  componentWillMount: function componentWillMount() {
+  getInitialState: function getInitialState() {
     var _this2 = this;
 
-    var springSystem = new _rebound2['default'].SpringSystem();
-    var spring = springSystem.createSpring(this.props.tension, this.props.friction);
+    return {
+      spring: this.props.springSystem.createSpring(this.props.tension, this.props.friction).addListener({
+        onSpringUpdate: function onSpringUpdate() {
+          _this2.setState({ value: _this2.state.spring.getCurrentValue() });
+          _this2.props.onSpringUpdate(_this2.state.spring);
+        }
+      })
+    };
+  },
 
-    spring.addListener({
-      onSpringUpdate: function onSpringUpdate() {
-        _this2.setState({ value: spring.getCurrentValue() });
-
-        _this2.props.onSpringUpdate(spring);
-      }
-    });
-    this.update(this.props, spring, true);
-    this.setState({ spring: spring, springSystem: springSystem });
+  componentWillMount: function componentWillMount() {
+    this.update(this.props, this.state.spring, true);
   },
   componentWillUnmount: function componentWillUnmount() {
     this.state.spring.removeAllListeners();
@@ -127,7 +124,7 @@ var Springs = React.createClass({
   },
   shouldComponentUpdate: function shouldComponentUpdate() {
     return true;
-    // don't be surprised, this fine, since 'children' would have been rendered without Springs in the way
+    // don't be surprised, this is fine, since 'children' would have been rendered without Springs in the way
   },
   to: function to(pos, keys, value, callback) {
     var _this3 = this;
@@ -138,10 +135,10 @@ var Springs = React.createClass({
     return React.createElement(
       Spring,
       _extends({}, this.props, { to: pos[keys[0]], onSpringUpdate: function (spring) {
-          return _this3.props.onSpringUpdate([keys[0], spring]);
+          return _this3.props.onSpringUpdate(keys[0], spring);
         } }),
       function (val) {
-        return _this3.to(pos, keys.slice(1), _extends({}, value, _defineProperty({}, keys[0], val)), callback);
+        return _this3.to(pos, keys.slice(1), (value[keys[0]] = val, value), callback);
       }
     );
   },
