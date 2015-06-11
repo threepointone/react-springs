@@ -116,7 +116,7 @@ export const Springs = React.createClass({
     if(keys.length === 0){
       return callback(value);
     }
-    return <Spring {...this.props} to={pos[keys[0]]} onSpringUpdate={spring => this.props.onSpringUpdate({[keys[0]]: spring})}>
+    return <Spring {...this.props} to={pos[keys[0]]} onSpringUpdate={spring => this.props.onSpringUpdate([keys[0], spring])}>
       {val => this.to(pos, keys.slice(1), {...value, [keys[0]]: val}, callback)}
     </Spring>;
 
