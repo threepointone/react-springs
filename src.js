@@ -65,34 +65,35 @@ export const Spring = React.createClass({
   update(props, initial){
     Object.keys(props).forEach(k => {
       if(Spring[k] && (initial || (props[k] !== this.props[k]))){
-        Spring[k](this.state.spring, props);
+        Spring[k](this.spring, props);
       }
     });
   },
   getInitialState() {
     return {
-      spring: this.props.springSystem.createSpring(this.props.tension, this.props.friction).addListener({
-        onSpringUpdate: () => {
-          this.setState({value: this.state.spring.getCurrentValue() });
-          this.props.onSpringUpdate(this.state.spring);
-        }
-      })
+      value: this.props.from
     };
   },
 
   componentWillMount() {
+    this.spring = this.props.springSystem.createSpring(this.props.tension, this.props.friction).addListener({
+      onSpringUpdate: () => {
+        this.setState({ value: this.spring.getCurrentValue() });
+        this.props.onSpringUpdate(this.spring);
+      }
+    });
     this.update(this.props, true);
   },
   componentWillUnmount() {
-    this.state.spring.removeAllListeners();
-    // this.state.springSystem.destroy();
+    this.spring.destroy();
+    delete this.spring;
   },
   componentWillReceiveProps(nextProps) {
     this.update(nextProps, false);
   },
 
   render(){
-    return this.props.children(this.state.spring.getCurrentValue());
+    return this.props.children(this.state.value);
   }
 });
 
@@ -118,7 +119,7 @@ export const Springs = React.createClass({
     </Spring>;
 
   },
-  // todo - sort keys alphabetically
+  // todo - sort keys alphabetically?
   render() {
     return this.to(this.props.to, Object.keys(this.props.to), {}, this.props.children);
   }
