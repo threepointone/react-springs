@@ -159,7 +159,7 @@ var Springs = React.createClass({
     var key = keys[index];
     return React.createElement(
       Spring,
-      _extends({ key: key }, this.props, { to: pos[key], onSpringUpdate: function (spring) {
+      _extends({}, this.props, { key: key, to: pos[key], onSpringUpdate: function (spring) {
           return _this3.props.onSpringUpdate(key, spring);
         } }),
       function (val) {

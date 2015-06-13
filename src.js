@@ -132,7 +132,7 @@ export const Springs = React.createClass({
       return this.props.children(value);
     }
     let key = keys[index];
-    return <Spring key={key} {...this.props} to={pos[key]} onSpringUpdate={spring => this.props.onSpringUpdate(key, spring)}>
+    return <Spring {...this.props} key={key} to={pos[key]} onSpringUpdate={spring => this.props.onSpringUpdate(key, spring)}>
       {val => this.to(pos, keys, index - 1, (value[key] = val, value))}
     </Spring>;
   },
