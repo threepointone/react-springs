@@ -8,6 +8,10 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
+// the above bit should get better after https://github.com/facebook/react/issues/3220
+
+// springs, all that
+
 var _rebound = require('rebound');
 
 var _rebound2 = _interopRequireDefault(_rebound);
@@ -19,27 +23,31 @@ try {
   React = require('react');
 }
 
-var noop = function noop() {};
+var noop = function noop() {}; // default onSpringUpdate
 
 var Spring = React.createClass({
   displayName: 'Spring',
 
   getDefaultProps: function getDefaultProps() {
     return {
+      // we use a common 'global' springSystem for perf, but you can pass in your own
       springSystem: new _rebound2['default'].SpringSystem(),
+
+      // from and to are analogous to setCurrentValue() and setEndValue()
       from: 0,
       to: 0,
+
+      // more rebound options
       tension: 50,
       friction: 3,
       overShootClamping: false,
       atRest: false,
       onSpringUpdate: noop
+
+      // todo - velocity?
     };
   },
-  shouldComponentUpdate: function shouldComponentUpdate() {
-    return true;
-    // don't be surprised, this is fine, since 'children' would have been rendered without Spring in the way
-  },
+
   propTypes: {
     from: React.PropTypes.number,
     friction: React.PropTypes.number,
@@ -50,6 +58,7 @@ var Spring = React.createClass({
     children: React.PropTypes.func,
     onSpringUpdate: React.PropTypes.func
   },
+
   statics: {
     // high perf "setters",
     friction: function friction(spring, props) {
@@ -72,7 +81,8 @@ var Spring = React.createClass({
       }
     }
   },
-  update: function update(props, initial) {
+
+  accept: function accept(props, initial) {
     var _this = this;
 
     Object.keys(props).forEach(function (k) {
@@ -81,6 +91,12 @@ var Spring = React.createClass({
       }
     });
   },
+
+  shouldComponentUpdate: function shouldComponentUpdate() {
+    return true;
+    // components with 'render callbacks' can/should render 'through'.
+  },
+
   getInitialState: function getInitialState() {
     return {
       value: this.props.from
@@ -90,20 +106,24 @@ var Spring = React.createClass({
   componentWillMount: function componentWillMount() {
     var _this2 = this;
 
+    // create the spring on mounting.
     this.spring = this.props.springSystem.createSpring(this.props.tension, this.props.friction).addListener({
       onSpringUpdate: function onSpringUpdate() {
         _this2.setState({ value: _this2.spring.getCurrentValue() });
         _this2.props.onSpringUpdate(_this2.spring);
       }
     });
-    this.update(this.props, true);
+    this.accept(this.props, true);
   },
+
+  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
+    this.accept(nextProps, false);
+  },
+
   componentWillUnmount: function componentWillUnmount() {
+    // ...and destroy on onmounting
     this.spring.destroy();
     delete this.spring;
-  },
-  componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
-    this.update(nextProps, false);
   },
 
   render: function render() {
@@ -120,32 +140,40 @@ var Springs = React.createClass({
       onSpringUpdate: noop
     };
   },
+
   propTypes: {
     onSpringUpdate: React.PropTypes.func
   },
+
   shouldComponentUpdate: function shouldComponentUpdate() {
     return true;
-    // don't be surprised, this is fine, since 'children' would have been rendered without Springs in the way
+    // like above
   },
-  to: function to(pos, keys, value, callback) {
+
+  to: function to(pos, keys, index, value) {
     var _this3 = this;
 
-    if (keys.length === 0) {
-      return callback(value);
+    if (index === -1) {
+      return this.props.children(value);
     }
+    var key = keys[index];
     return React.createElement(
       Spring,
-      _extends({}, this.props, { to: pos[keys[0]], onSpringUpdate: function (spring) {
-          return _this3.props.onSpringUpdate(keys[0], spring);
+      _extends({ key: key }, this.props, { to: pos[key], onSpringUpdate: function (spring) {
+          return _this3.props.onSpringUpdate(key, spring);
         } }),
       function (val) {
-        return _this3.to(pos, keys.slice(1), (value[keys[0]] = val, value), callback);
+        return _this3.to(pos, keys, index - 1, (value[key] = val, value));
       }
     );
   },
+
   // todo - sort keys alphabetically?
   render: function render() {
-    return this.to(this.props.to, Object.keys(this.props.to), {}, this.props.children);
+    // what we do here, is break `to` into key value pairs, and then return a nest of <Spring>s
+    // React takes care of the boring bits (caching, state, etc)
+    var to = this.props.to;var keys = Object.keys(to);
+    return this.to(to, keys, keys.length - 1, {});
   }
 });
 exports.Springs = Springs;
