@@ -38,6 +38,7 @@ props
 - overshootClamping: *boolean*
 - onSpringUpdate (Spring): *function* : optional callback to be notified on every spring movement. 'returns' the spring.
 - onSpringUpdate (Springs): *function* : like `Spring`, but 'returns' `key, spring`
+- springSystem: *SpringSystem* optional instance of rebound's SpringSystem. useful for perf/custom loopers/etc.
 
 dev
 ---

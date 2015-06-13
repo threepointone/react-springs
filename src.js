@@ -14,7 +14,7 @@ export const Spring = React.createClass({
       // we use a common 'global' springSystem for perf, but you can pass in your own
       springSystem: new rebound.SpringSystem(),
 
-      // from and to and analogous to setCurrentValue() and setEndValue()
+      // from and to are analogous to setCurrentValue() and setEndValue()
       from: 0,
       to: 0,
 
