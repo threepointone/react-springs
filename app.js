@@ -1,7 +1,6 @@
 import React from 'react';
 import {Spring, Springs} from './src';
 import rebound from 'rebound';
-import Stylesheet from 'react-style';
 
 function times (n, fn){
   var arr = [];
@@ -9,26 +8,14 @@ function times (n, fn){
   return arr;
 }
 
-let styles = { };
+let styles = {};
 
-// function findPos(obj) {
-//   var x = 0, y = 0;
-//   if (obj.offsetParent) {
-//     do{
-//       x += obj.offsetLeft;
-//       y += obj.offsetTop;
-//     } while (obj = obj.offsetParent);
-//   }
-//   return {x, y};
-// }
-
-
-styles.slideshow = Stylesheet.create({
+styles.slideshow = {
   wrap: { width: 400, height: 400, outline: '1px solid #ccc' },
   bar: { flexDirection: 'row', height: 60, position: 'absolute' },
   slide: { flex: 1, fontSize: 200, alignItems: 'center', justifyContent: 'center' },
   thumb: { justifyContent: 'center', alignItems: 'center', flex: 1, cursor: 'pointer' }
-});
+};
 
 
 // ICK
@@ -55,15 +42,15 @@ export const Slideshow = React.createClass({
         onMouseEnter={() => this.setState({opacity: 1})}
         onMouseLeave={() => this.setState({opacity: 0})}>
           <Spring to={1} from={this.state.selected} tension={5} friction={1} overshootClamping={true}>{bg =>
-            <div styles={[{backgroundColor: rebound.util.interpolateColor(bg, '#ddd', '#fff')}, styles.slideshow.slide]}>
+            <div style={{backgroundColor: rebound.util.interpolateColor(bg, '#ddd', '#fff'), ...styles.slideshow.slide}}>
             {this.state.active}
           </div>}</Spring>
 
           <Springs to={{...this.convert(this.state.x, this.state.y), opacity: this.state.opacity}} tension={50} friction={8}>{val =>
-            <div styles={[val, {width: this.props.n * 60}, styles.slideshow.bar]} onMouseLeave={() => this.setState({hover: -1})}>
+            <div style={{...val, width: this.props.n * 60, ...styles.slideshow.bar}} onMouseLeave={() => this.setState({hover: -1})}>
               {times(this.props.n, i =>
-                <Spring to={this.state.hover === i ? 1 : 0} overshootClamping={true}>{ bg =>
-                  <div key={i} styles={[styles.slideshow.thumb, {backgroundColor: rebound.util.interpolateColor(bg, '#ccc', '#fff')}]}
+                <Spring key={i} to={this.state.hover === i ? 1 : 0} overshootClamping={true}>{ bg =>
+                  <div key={i} style={{...styles.slideshow.thumb, backgroundColor: rebound.util.interpolateColor(bg, '#ccc', '#fff')}}
                     onMouseEnter={() => this.setState({hover: i})}
                     onClick={()=> this.setState({active: i, selected: (Math.random() / 100)})}>
                       {i}
@@ -85,12 +72,12 @@ export const Slideshow = React.createClass({
   }
 });
 
-styles.followers = Stylesheet.create({
+styles.followers = {
   wrap: { width: 400, height: 400, outline: '1px solid #ccc', marginTop: 20 },
   box: { width: 20, height: 20, position: 'absolute', borderRadius: 10 },
   blue: { backgroundColor: 'blue' },
   red: { backgroundColor: 'red' }
-});
+};
 
 export const Followers = React.createClass({
   getInitialState() {
@@ -104,19 +91,19 @@ export const Followers = React.createClass({
   render() {
     return <div onMouseMove={this.onMouseMove} style={styles.followers.wrap}>
       <Springs to={{x: this.state.x, y: this.state.y}} tension={10} friction={1}>
-        {vals => <div styles={[{left: vals.x - 10, top: vals.y - 10}, styles.followers.box, styles.followers.red]}></div>}
+        {vals => <div style={{left: vals.x - 10, top: vals.y - 10, ...styles.followers.box, ...styles.followers.red}}></div>}
       </Springs>
 
       <Spring to={this.state.x} tension={15} friction={1.5}>{x =>
           <Spring to={this.state.y} tension={34} friction={7}>{y =>
-            <div styles={[{left: x - 10, top: y - 10}, styles.followers.box, styles.followers.blue]}></div>}
+            <div style={{left: x - 10, top: y - 10, ...styles.followers.box, ...styles.followers.blue}}></div>}
           </Spring>}
       </Spring>
     </div>;
   }
 });
 
-styles.unlock = Stylesheet.create({
+styles.unlock = {
   wrap: { width: 400, height: 400, outline: '1px solid #ccc', marginTop: 20, justifyContent: 'center' },
   lockscreen: { width: 200, height: 50, backgroundColor: '#ccc', position: 'absolute', top: '50%', marginTop: -25, left: '50%',
     marginLeft: -100, justifyContent: 'center', alignItems: 'center', borderRadius: 30 },
@@ -126,7 +113,7 @@ styles.unlock = Stylesheet.create({
   lock: { cursor: 'pointer' },
    noSelect: { 'WebkitTouchCallout': 'none', 'WebkitUserSelect': 'none', 'KhtmlUserSelect': 'none',
     'MozUserSelect': 'none', 'MsUserSelect': 'none', 'UserSelect': 'none' }
-});
+};
 
 export const SlideToUnlock = React.createClass({
   getInitialState() {
@@ -158,13 +145,13 @@ export const SlideToUnlock = React.createClass({
   },
   render() {
     return <Springs to={{x: this.state.x, opacity: this.state.opacity, delta: this.state.delta}} tension={70} friction={8} overshootClamping={true}>{ val =>
-      <div styles={[styles.unlock.wrap, styles.unlock.noSelect]} onMouseMove={this.onMouseMove} onMouseUp={this.onMouseUp}>
-        <div styles={[styles.unlock.lockscreen, {opacity: 1 - val.opacity, zIndex: Math.round(1 - val.opacity)}]}>
+      <div style={{...styles.unlock.wrap, ...styles.unlock.noSelect}} onMouseMove={this.onMouseMove} onMouseUp={this.onMouseUp}>
+        <div style={{...styles.unlock.lockscreen, opacity: 1 - val.opacity, zIndex: Math.round(1 - val.opacity)}}>
           slide
-          <div id='keyElement' styles={[styles.unlock.key, {left: val.x - val.delta}]} onMouseDown={this.onKeyMouseDown}> > </div>
+          <div id='keyElement' style={{...styles.unlock.key, left: val.x - val.delta}} onMouseDown={this.onKeyMouseDown}> > </div>
         </div>
-        <div styles={[styles.unlock.main, {opacity: val.opacity, zIndex: Math.round(val.opacity)}]}>
-          <div styles={[styles.unlock.lock]} onClick={()=> this.setState({opacity: 0, x: 0, delta: 0})}>
+        <div style={{...styles.unlock.main, opacity: val.opacity, zIndex: Math.round(val.opacity)}}>
+          <div style={styles.unlock.lock} onClick={()=> this.setState({opacity: 0, x: 0, delta: 0})}>
             click
           </div>
         </div>
@@ -180,7 +167,7 @@ styles.root = { alignItems: 'center', paddingTop: 20, paddingBottom: 20 };
 export const App = React.createClass({
   render() {
     return <div style={styles.root}>
-      <Slideshow n={30} pos={0}/>
+      <Slideshow n={50} pos={0}/>
       <Followers pos={1}/>
       <SlideToUnlock pos={2}/>
     </div>;

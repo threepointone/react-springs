@@ -45,3 +45,8 @@ dev
 `npm install`
 
 `npm start`
+
+notes
+---
+
+- don't forget about the ridiculous performance boost you get from React when NODE_ENV=production
