@@ -72,41 +72,42 @@ var Spring = React.createClass({
       }
     }
   },
-  update: function update(props, spring, initial) {
+  update: function update(props, initial) {
     var _this = this;
 
     Object.keys(props).forEach(function (k) {
       if (Spring[k] && (initial || props[k] !== _this.props[k])) {
-        Spring[k](spring, props);
+        Spring[k](_this.spring, props);
       }
     });
   },
   getInitialState: function getInitialState() {
-    var _this2 = this;
-
     return {
-      spring: this.props.springSystem.createSpring(this.props.tension, this.props.friction).addListener({
-        onSpringUpdate: function onSpringUpdate() {
-          _this2.setState({ value: _this2.state.spring.getCurrentValue() });
-          _this2.props.onSpringUpdate(_this2.state.spring);
-        }
-      })
+      value: this.props.from
     };
   },
 
   componentWillMount: function componentWillMount() {
-    this.update(this.props, this.state.spring, true);
+    var _this2 = this;
+
+    this.spring = this.props.springSystem.createSpring(this.props.tension, this.props.friction).addListener({
+      onSpringUpdate: function onSpringUpdate() {
+        _this2.setState({ value: _this2.spring.getCurrentValue() });
+        _this2.props.onSpringUpdate(_this2.spring);
+      }
+    });
+    this.update(this.props, true);
   },
   componentWillUnmount: function componentWillUnmount() {
-    this.state.spring.removeAllListeners();
-    // this.state.springSystem.destroy();
+    this.spring.destroy();
+    delete this.spring;
   },
   componentWillReceiveProps: function componentWillReceiveProps(nextProps) {
-    this.update(nextProps, this.state.spring, false);
+    this.update(nextProps, false);
   },
 
   render: function render() {
-    return this.props.children(this.state.spring.getCurrentValue());
+    return this.props.children(this.state.value);
   }
 });
 
@@ -142,7 +143,7 @@ var Springs = React.createClass({
       }
     );
   },
-  // todo - sort keys alphabetically
+  // todo - sort keys alphabetically?
   render: function render() {
     return this.to(this.props.to, Object.keys(this.props.to), {}, this.props.children);
   }
