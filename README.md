@@ -7,6 +7,8 @@ react-springs
 
 Dynamic animations for [react](https://facebook.github.io/react/)/[react-native](https://facebook.github.io/react-native/), powered by [rebound](https://github.com/facebook/rebound-js).
 
+(if you're looking for something more conventional, consider [react-ease](https://github.com/threepointone/react-ease))
+
 ```js
 // output floats gradually from 0 to 10
 <Spring to={10}>
