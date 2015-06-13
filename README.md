@@ -51,3 +51,4 @@ notes
 ---
 
 - don't forget about the ridiculous performance boost you get from React when NODE_ENV=production
+- open to ideas on how to set 'velocity' for flings, etc
