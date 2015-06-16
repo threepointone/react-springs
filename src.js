@@ -114,7 +114,6 @@ export const Spring = React.createClass({
 export const Springs = React.createClass({
   getDefaultProps(){
     return {
-      from: {},
       onSpringUpdate: noop
     };
   },
@@ -126,9 +125,6 @@ export const Springs = React.createClass({
   shouldComponentUpdate(){
     return true;
     // like above
-  },
-  getInitialState() {
-    return this.props.from;
   },
   onSpringUpdate(key, spring){
     this.setState({

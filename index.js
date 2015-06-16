@@ -139,7 +139,6 @@ var Springs = React.createClass({
 
   getDefaultProps: function getDefaultProps() {
     return {
-      from: {},
       onSpringUpdate: noop
     };
   },
@@ -151,9 +150,6 @@ var Springs = React.createClass({
   shouldComponentUpdate: function shouldComponentUpdate() {
     return true;
     // like above
-  },
-  getInitialState: function getInitialState() {
-    return this.props.from;
   },
   onSpringUpdate: function onSpringUpdate(key, spring) {
     this.setState(_defineProperty({}, key, spring.getCurrentValue()));
