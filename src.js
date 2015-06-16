@@ -114,6 +114,7 @@ export const Spring = React.createClass({
 export const Springs = React.createClass({
   getDefaultProps(){
     return {
+      from: {},
       onSpringUpdate: noop
     };
   },
@@ -126,13 +127,22 @@ export const Springs = React.createClass({
     return true;
     // like above
   },
+  getInitialState() {
+    return this.props.from;
+  },
+  onSpringUpdate(key, spring){
+    this.setState({
+      [key]: spring.getCurrentValue()
+    });
+    this.props.onSpringUpdate(key, spring);
+  },
 
   to(pos, keys, index, value){
     if(index === -1){
       return this.props.children(value);
     }
     let key = keys[index];
-    return <Spring {...this.props} key={key} to={pos[key]} onSpringUpdate={spring => this.props.onSpringUpdate(key, spring)}>
+    return <Spring {...this.props} key={key} to={pos[key]} onSpringUpdate={spring => this.onSpringUpdate(key, spring)}>
       {val => this.to(pos, keys, index - 1, (value[key] = val, value))}
     </Spring>;
   },

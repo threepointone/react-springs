@@ -8,6 +8,8 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { 'default': obj }; }
 
+function _defineProperty(obj, key, value) { return Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); }
+
 // the above bit should get better after https://github.com/facebook/react/issues/3220
 
 // springs, all that
@@ -137,6 +139,7 @@ var Springs = React.createClass({
 
   getDefaultProps: function getDefaultProps() {
     return {
+      from: {},
       onSpringUpdate: noop
     };
   },
@@ -149,6 +152,13 @@ var Springs = React.createClass({
     return true;
     // like above
   },
+  getInitialState: function getInitialState() {
+    return this.props.from;
+  },
+  onSpringUpdate: function onSpringUpdate(key, spring) {
+    this.setState(_defineProperty({}, key, spring.getCurrentValue()));
+    this.props.onSpringUpdate(key, spring);
+  },
 
   to: function to(pos, keys, index, value) {
     var _this3 = this;
@@ -160,7 +170,7 @@ var Springs = React.createClass({
     return React.createElement(
       Spring,
       _extends({}, this.props, { key: key, to: pos[key], onSpringUpdate: function (spring) {
-          return _this3.props.onSpringUpdate(key, spring);
+          return _this3.onSpringUpdate(key, spring);
         } }),
       function (val) {
         return _this3.to(pos, keys, index - 1, (value[key] = val, value));
