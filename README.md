@@ -28,14 +28,10 @@ Dynamic animations for [react](https://facebook.github.io/react/)/[react-native]
 </Spring>
 
 // and if you'd rather not use the child-function pattern
-
-render(){
-  return <div>
-    <Spring to={20} onSpringUpdate={spring => this.setState({ value: spring.getCurrentValue() })} />
-    <div style={{left: this.state.value}}>moving box</div>
-  </div>
-}
-
+<div>
+  <Spring to={20} onSpringUpdate={spring => this.setState({ value: spring.getCurrentValue() })} />
+  <div style={{left: this.state.value}}>moving box</div>
+</div>
 ```
 
 props
