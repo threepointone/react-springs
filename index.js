@@ -44,10 +44,14 @@ var Spring = React.createClass({
       friction: 3,
       overShootClamping: false,
       atRest: false,
-      onSpringUpdate: noop
+      onSpringUpdate: noop,
+      onSpring: noop,
+      children: function children() {
+        return null
 
-      // todo - velocity?
-    };
+        // todo - velocity?
+        ;
+      } };
   },
 
   propTypes: {
@@ -58,7 +62,8 @@ var Spring = React.createClass({
     atRest: React.PropTypes.bool,
     overShootClamping: React.PropTypes.bool,
     children: React.PropTypes.func,
-    onSpringUpdate: React.PropTypes.func
+    onSpringUpdate: React.PropTypes.func,
+    onSpring: React.PropTypes.func
   },
 
   statics: {
@@ -115,6 +120,7 @@ var Spring = React.createClass({
         _this2.props.onSpringUpdate(_this2.spring);
       }
     });
+    this.props.onSpring(this.spring);
     this.accept(this.props, true);
   },
 
@@ -126,6 +132,7 @@ var Spring = React.createClass({
     // ...and destroy on onmounting
     this.spring.destroy();
     delete this.spring;
+    this.props.onSpring(undefined);
   },
 
   render: function render() {
@@ -139,12 +146,18 @@ var Springs = React.createClass({
 
   getDefaultProps: function getDefaultProps() {
     return {
-      onSpringUpdate: noop
+      onSpringUpdate: noop,
+      onSpring: noop,
+      children: function children() {
+        return null;
+      }
     };
   },
 
   propTypes: {
-    onSpringUpdate: React.PropTypes.func
+    onSpringUpdate: React.PropTypes.func,
+    onSpring: React.PropTypes.func,
+    children: React.PropTypes.func
   },
 
   shouldComponentUpdate: function shouldComponentUpdate() {
@@ -165,7 +178,9 @@ var Springs = React.createClass({
     var key = keys[index];
     return React.createElement(
       Spring,
-      _extends({}, this.props, { key: key, to: pos[key], onSpringUpdate: function (spring) {
+      _extends({}, this.props, { key: key, to: pos[key], onSpring: function (spring) {
+          return _this3.props.onSpring(key, spring);
+        }, onSpringUpdate: function (spring) {
           return _this3.onSpringUpdate(key, spring);
         } }),
       function (val) {

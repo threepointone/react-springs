@@ -26,6 +26,16 @@ Dynamic animations for [react](https://facebook.github.io/react/)/[react-native]
         <div style={{left: x, top: y}}/>}
     </Spring>}
 </Spring>
+
+// and if you'd rather not use the child-function pattern
+
+render(){
+  return <div>
+    <Spring to={20} onSpringUpdate={spring => this.setState({ value: spring.getCurrentValue() })} />
+    <div style={{left: this.state.value}}>moving box</div>
+  </div>
+}
+
 ```
 
 props
@@ -40,7 +50,9 @@ props
 - overshootClamping: *boolean*
 - onSpringUpdate (Spring): *function* : optional callback to be notified on every spring movement. 'returns' the spring.
 - onSpringUpdate (Springs): *function* : like `Spring`, but 'returns' `key, spring`
-- springSystem: *SpringSystem* optional instance of rebound's SpringSystem. useful for perf/custom loopers/etc.
+- springSystem: *SpringSystem* : optional instance of rebound's SpringSystem. useful for perf/custom loopers/etc.
+- onSpring (Spring): *function* : 'returns' a reference to the spring object when it is created/destroyed
+- onSpring (Springs): *spring* : like `Spring`, but 'returns' `key, spring`
 
 dev
 ---

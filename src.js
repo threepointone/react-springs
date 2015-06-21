@@ -23,7 +23,9 @@ export const Spring = React.createClass({
       friction: 3,
       overShootClamping: false,
       atRest: false,
-      onSpringUpdate: noop
+      onSpringUpdate: noop,
+      onSpring: noop,
+      children: () => null
 
       // todo - velocity?
     };
@@ -37,7 +39,8 @@ export const Spring = React.createClass({
     atRest: React.PropTypes.bool,
     overShootClamping: React.PropTypes.bool,
     children: React.PropTypes.func,
-    onSpringUpdate: React.PropTypes.func
+    onSpringUpdate: React.PropTypes.func,
+    onSpring: React.PropTypes.func
   },
 
   statics: {
@@ -93,6 +96,7 @@ export const Spring = React.createClass({
         this.props.onSpringUpdate(this.spring);
       }
     });
+    this.props.onSpring(this.spring);
     this.accept(this.props, true);
   },
 
@@ -104,6 +108,7 @@ export const Spring = React.createClass({
     // ...and destroy on onmounting
     this.spring.destroy();
     delete this.spring;
+    this.props.onSpring(undefined);
   },
 
   render(){
@@ -114,12 +119,16 @@ export const Spring = React.createClass({
 export const Springs = React.createClass({
   getDefaultProps(){
     return {
-      onSpringUpdate: noop
+      onSpringUpdate: noop,
+      onSpring: noop,
+      children: () => null
     };
   },
 
   propTypes: {
-    onSpringUpdate: React.PropTypes.func
+    onSpringUpdate: React.PropTypes.func,
+    onSpring: React.PropTypes.func,
+    children: React.PropTypes.func
   },
 
   shouldComponentUpdate(){
@@ -138,7 +147,7 @@ export const Springs = React.createClass({
       return this.props.children(value);
     }
     let key = keys[index];
-    return <Spring {...this.props} key={key} to={pos[key]} onSpringUpdate={spring => this.onSpringUpdate(key, spring)}>
+    return <Spring {...this.props} key={key} to={pos[key]} onSpring={spring => this.props.onSpring(key, spring)} onSpringUpdate={spring => this.onSpringUpdate(key, spring)}>
       {val => this.to(pos, keys, index - 1, (value[key] = val, value))}
     </Spring>;
   },
