@@ -48,7 +48,7 @@ props
 - onSpringUpdate (Springs): *function* : like `Spring`, but 'returns' `key, spring`
 - springSystem: *SpringSystem* : optional instance of rebound's SpringSystem. useful for perf/custom loopers/etc.
 - onSpring (Spring): *function* : 'returns' a reference to the spring object when it is created/destroyed
-- onSpring (Springs): *spring* : like `Spring`, but 'returns' `key, spring`
+- onSpring (Springs): *function* : like `Spring`, but 'returns' `key, spring`
 
 dev
 ---
