@@ -1,6 +1,6 @@
 {
   "name": "react-springs",
-  "version": "1.0.13",
+  "version": "1.1.0",
   "description": "ooh lookit the wow",
   "main": "./lib/index.js",
   "scripts": {
