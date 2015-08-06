@@ -1,14 +1,15 @@
 import webpack from 'webpack';
+// import path from 'path';
 
 let config = {
   devtool: 'source-map',
   target: 'web',
   entry: {
-    entry: ['./entry.js']
+    demos: ['./examples/demos/index.js']
   },
   output: {
     path: __dirname,
-    filename: '[name].build.js',
+    filename: 'examples/[name]/bundle.js',
     publicPath: '/'
   },
   module: {

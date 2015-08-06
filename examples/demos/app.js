@@ -1,5 +1,5 @@
 import React from 'react';
-import {Spring, Springs} from './src';
+import {Spring, Springs} from '../../src';
 import rebound from 'rebound';
 
 function times (n, fn){

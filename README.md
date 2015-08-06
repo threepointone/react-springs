@@ -47,8 +47,6 @@ props
 - onSpringUpdate (Spring): *function* : optional callback to be notified on every spring movement. 'returns' the spring.
 - onSpringUpdate (Springs): *function* : like `Spring`, but 'returns' `key, spring`
 - springSystem: *SpringSystem* : optional instance of rebound's SpringSystem. useful for perf/custom loopers/etc.
-- onSpring (Spring): *function* : 'returns' a reference to the spring object when it is created/destroyed
-- onSpring (Springs): *function* : like `Spring`, but 'returns' `key, spring`
 
 dev
 ---

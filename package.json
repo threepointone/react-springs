@@ -2,12 +2,12 @@
   "name": "react-springs",
   "version": "1.0.13",
   "description": "ooh lookit the wow",
-  "main": "index.js",
+  "main": "./lib/index.js",
   "scripts": {
     "test": "mocha",
-    "build": "babel src.js -o index.js",
-    "start": "HOT=1 babel-node dev.js",
-    "dev": "babel-node dev.js"
+    "build": "rm -rf lib && babel src -d lib",
+    "start": "HOT=1 babel-node server.js",
+    "dev": "babel-node server.js"
   },
   "keywords": [
     "animation",
